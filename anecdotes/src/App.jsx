@@ -10,10 +10,25 @@ const App = () => {
     dispatch(voteAnecdote(id))
   }
 
+  const createAnecdote = (event) => {
+    event.preventDefault()
+    const content = event.target.anecdote.value
+    event.target.anecdote.value = ''
+    dispatch({ 
+      type: 'NEW_ANECDOTE',
+      data: { 
+        content, 
+        id: Math.random().toString(36).substring(2, 15), 
+        votes: 0 } 
+      }
+)}
+
+  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
+
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {sortedAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -25,9 +40,11 @@ const App = () => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
+      <form onSubmit={createAnecdote}>
+        <div>
+          <input name='anecdote' />
+        </div>
+          <button type='submit'>create</button>
       </form>
     </div>
   )

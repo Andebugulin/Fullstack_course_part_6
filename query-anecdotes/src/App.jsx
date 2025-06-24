@@ -3,8 +3,11 @@ import Notification from './components/Notification'
 import axios from 'axios'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getAnecdotes, updateAnecdote } from './requests'
+import { useContext } from 'react'
+import NotificationContext from './contexts/notificationContext'
 
 const App = () => {
+  const { setNotification } = useContext(NotificationContext)
 
   const queryClient = useQueryClient()
 
@@ -12,6 +15,7 @@ const App = () => {
     mutationFn: updateAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+      setNotification('anecdote voted successfully')
     }
   })
 
